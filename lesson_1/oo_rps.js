@@ -8,7 +8,6 @@ function createPlayer() {
 
 
 function createComputer() {
-
   let playerObject = createPlayer();
 
   let computerObject = {
