@@ -1,23 +1,6 @@
-let RPSLSGame = {
-  match: {
-    roundHistory: ['player', 'computer'],
-
-    round: {
-      updateRoundHistory() {
-        RPSLSGame.match.roundHistory.push('spock')
-      }
-    },
-
-
-
-    calculatePlayerWins() {
-      console.log(this.roundHistory);
-    },
-
-  },
+function addQuotationMarks(array) {
+  return array.map(element => `'${element}'`)
 }
 
 
-RPSLSGame.match.round.updateRoundHistory();
-RPSLSGame.match.calculatePlayerWins();
-
+addQuotationMarks(['a', 'b', 'c']).forEach(element => console.log(element));
