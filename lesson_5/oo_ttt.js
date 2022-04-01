@@ -1,9 +1,23 @@
+let readline = require("readline-sync");
+
 class Square {
   constructor(marker = " ") {
     this.marker = marker;
   }
 
   toString() {
+    return this.marker;
+  }
+
+  setMarker(marker) {
+    this.marker = marker;
+  }
+
+  isUnused() {
+    return this.marker === Square.UNUSED_SQUARE;
+  }
+
+  getMarker() {
     return this.marker;
   }
 }
@@ -18,6 +32,13 @@ class Board {
     for (let counter = 1; counter <= 9; ++counter) {
       this.squares[String(counter)] = new Square();
     }
+  }
+
+  displayWithClear() {
+    console.clear();
+    console.log("");
+    console.log("");
+    this.display();
   }
 
   display() {
@@ -35,51 +56,56 @@ class Board {
     console.log("     |     |");
     console.log("");
   }
-}
 
-
-
-class Row {
-  constructor() {
-
+  markSquareAt(key, marker) {
+    this.squares[key].setMarker(marker);
   }
-}
 
-class Marker {
-  constructor() {
+  unusedSquares() {
+    let keys = Object.keys(this.squares);
+    return keys.filter(key => this.squares[key].isUnused());
+  }
 
+  isFull() {
+    return this.unusedSquares().length === 0;
+  }
+
+  countMarkersFor(player, keys) {
+    let markers = keys.filter(key => {
+      return this.squares[key].getMarker() === player.getMarker();
+    });
+
+    return markers.length;
   }
 }
 
 class Player {
-  constructor() {
-
+  constructor(marker) {
+    this.marker = marker;
   }
 
-  mark() {
-
-  }
-
-  play() {
-
+  getMarker() {
+    return this.marker;
   }
 }
 
 class Human extends Player {
   constructor() {
-
+    super(Square.HUMAN_MARKER);
   }
 }
 
 class Computer extends Player {
   constructor() {
-
+    super(Square.COMPUTER_MARKER);
   }
 }
 
 class TTTGame {
   constructor() {
     this.board = new Board();
+    this.human = new Human();
+    this.computer = new Computer();
   }
 
   play() {
@@ -87,22 +113,24 @@ class TTTGame {
     this.displayWelcomeMessage();
 
     while (true) {
-      this.board.display();
-
-      this.firstPlayerMoves();
+      this.humanMoves();
       if (this.gameOver()) break;
 
-      this.secondPlayerMoves();
+      this.computerMoves();
       if (this.gameOver()) break;
-      break;
+
+      this.board.displayWithClear();
     }
 
+    this.board.displayWithClear();
     this.displayResults();
     this.displayGoodbyeMessage();
   }
 
   displayWelcomeMessage() {
+    console.log();
     console.log("Welcome to Tic Tac Toe!");
+    console.log("");
   }
 
   displayGoodbyeMessage() {
@@ -110,21 +138,69 @@ class TTTGame {
   }
 
   displayResults() {
-
+    if (this.isWinner(this.human)) {
+      console.log("You won! Congratulations!");
+    } else if (this.isWinner(this.computer)) {
+      console.log("I won! I won! Take that, human!");
+    } else {
+      console.log("A tie game. How boring.");
+    }
   }
 
-  firstPlayerMoves() {
-
+  isWinner(player) {
+    return TTTGame.POSSIBLE_WINNING_ROWS.some(row => {
+      return this.board.countMarkersFor(player, row) === 3;
+    });
   }
 
-  secondPlayerMoves() {
+  humanMoves() {
+    let choice;
 
+    while (true) {
+
+      let validChoices = this.board.unusedSquares();
+      const prompt = `Choose a square (${validChoices.join(", ")}): `;
+      choice = readline.question(prompt);
+
+      if (validChoices.includes(choice)) break;
+
+      console.log("Sorry, that's not a valid choice.");
+      console.log("");
+    }
+
+    this.board.markSquareAt(choice, this.human.getMarker());
+  }
+
+  computerMoves() {
+    let validChoices = this.board.unusedSquares();
+    let choice;
+
+    do {
+      choice = Math.floor((9 * Math.random()) + 1).toString();
+    } while (!validChoices.includes(choice));
+
+    this.board.markSquareAt(choice, this.computer.getMarker());
   }
 
   gameOver() {
-    return false;
+    return this.board.isFull() || this.someoneWon();
+  }
+
+  someoneWon() {
+    return this.isWinner(this.human) || this.isWinner(this.computer);
   }
 }
+
+TTTGame.POSSIBLE_WINNING_ROWS = [
+  ["1", "2", "3"],
+  ["4", "5", "6"],
+  ["7", "8", "9"],
+  ["1", "4", "7"],
+  ["2", "5", "8"],
+  ["3", "6", "9"],
+  ["1", "5", "9"],
+  ["3", "5", "7"],
+];
 
 let game = new TTTGame();
 game.play();
