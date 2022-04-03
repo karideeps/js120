@@ -16,101 +16,26 @@ Game design:
 Minor revisions:
 [] The program should accept `y` `yes` or `n`, `no` (in lowercase or uppercase) as valid answers at the "play again"; all other answers are invalid.
 
-Use Classes to create this program
+What classes do I want to have?
 
-ScoreBoard
-  this.playerWins = 0
-  this.computerWins = 0
-  this.ties = 0
-
-  displayScoreBoard();
-
-Square
-  static UNUSED_SQUARE = " ";
-  static HUMAN_MARKER = 'X';
-  static COMPUTER_MARKER = 'O';
+Squares
 
 GameBoard
-  this.squares = {
-  }
-  use a loop to create this object
-
-  displayBoard();
-  reset();
-
-Computer
-  static MARKER = 'O'
-  computerMakesMove() (this depend on and changes the state of Board);
-  offensiveMove()
-  defensiveMove()
-  pickCentreSquare()
-  pickRandomSquare()
+  needs Squares
 
 Human
-  static MARKER = 'X'
-  Picks move (this depends on and changes the state of Board)
 
-Match
-  // The first to win 3 games wins the match.
-  // The program terminates after the match is won or lost.
-
-  static WINS_NEEDED_TO_WIN_MATCH = 3
-
-  this.scoreBoard = new ScoreBoard();
-  this.human = new HumanPlayer();
-  this.computer = new ComputerPlayer();
-  this.round = new Round();
-
-  displayWelcomeMessage()
-  display rounds won (computer, player, tie)
-  displayGoodbyeMessage()
-  getPlayAgain()
-  iterateScoreBoard()
-  play()
-    displayWelcomeMessage
-    while(this.scoreBoard.humanWins < Match.WINS_NEEDED_TO_WIN_MATCH && scoreBoard.computerWins < 3) {
-      round.play();
-      iterateScoreBoard(this.round.winner)
-      playAgain = getPlayAgain();
-      if (playAgain === 'n' or 'no') break
-    }
-    displayGoodbyeMessage()
-
+Computer
 
 Round
-  static POSSIBLE_WINNING_ROWS = []
+  needs Human
+  needs Computer
+  needs GameBoard
 
-  this.roundNumber = 1;
-  this.gameBoard = new GameBoard();
-  this.winner  = null;
+ScoreBoard
 
-  calculateRoundWinner()
-
-  play()
-    while(true) {
-      if (roundNumber is odd) {
-        human makes move
-        break if roundWinner()
-        computer makes move
-        break if roundWinner(/)
-      }
-
-      if (roundNumber is even) {
-        computer makes move
-        break if roundWinner()
-        human makes move
-        break if roundWinner()
-      }
-    }
-
-    this.winner = calculateRoundWinner()
-    gameBoard.reset();
-
-Does the logic of Round work? How will I create
-Fix logic behind players alternating per turn.
-
+Match
+  needs Round
+  needs ScoreBoard
 
 */
-
-// game = new Match();
-// game.play();
