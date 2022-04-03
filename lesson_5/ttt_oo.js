@@ -16,71 +16,101 @@ Game design:
 Minor revisions:
 [] The program should accept `y` `yes` or `n`, `no` (in lowercase or uppercase) as valid answers at the "play again"; all other answers are invalid.
 
-
-I will use constructor and prototype
+Use Classes to create this program
 
 ScoreBoard
-  States:
-    roundNumber:
-    playerWins:
-    computerWins:
-    ties:
+  this.playerWins = 0
+  this.computerWins = 0
+  this.ties = 0
+
   displayScoreBoard();
 
-GameBoard
-  State of Board (free tiles, computer tiles, human titles)
-  displayBoard()
+Square
+  static UNUSED_SQUARE = " ";
+  static HUMAN_MARKER = 'X';
+  static COMPUTER_MARKER = 'O';
 
-ComputerPlayer
-  Computer Marker
+GameBoard
+  this.squares = {
+  }
+  use a loop to create this object
+
+  displayBoard();
+  reset();
+
+Computer
+  static MARKER = 'O'
   computerMakesMove() (this depend on and changes the state of Board);
   offensiveMove()
   defensiveMove()
   pickCentreSquare()
   pickRandomSquare()
 
-HumanPlayer
-  Human Marker
+Human
+  static MARKER = 'X'
   Picks move (this depends on and changes the state of Board)
 
 Match
   // The first to win 3 games wins the match.
   // The program terminates after the match is won or lost.
 
+  static WINS_NEEDED_TO_WIN_MATCH = 3
+
+  this.scoreBoard = new ScoreBoard();
+  this.human = new HumanPlayer();
+  this.computer = new ComputerPlayer();
+  this.round = new Round();
+
   displayWelcomeMessage()
   display rounds won (computer, player, tie)
-  displayGoodbyeMessage
+  displayGoodbyeMessage()
+  getPlayAgain()
+  iterateScoreBoard()
   play()
     displayWelcomeMessage
-    scoreBoard = new ScoreBoard();
-    human = new HumanPlayer();
-    computer = new ComputerPlayer();
-    while(scoreBoard.humanWins < 3 || scoreBoard.computerWins < 3) {
-      round = new Round();
+    while(this.scoreBoard.humanWins < Match.WINS_NEEDED_TO_WIN_MATCH && scoreBoard.computerWins < 3) {
       round.play();
+      iterateScoreBoard(this.round.winner)
+      playAgain = getPlayAgain();
+      if (playAgain === 'n' or 'no') break
     }
+    displayGoodbyeMessage()
+
 
 Round
-   // Players have to choose [y, yes, n, no] if they want to play the next game.
-    // No terminates the program.
-    // Yes plays the next game
+  static POSSIBLE_WINNING_ROWS = []
 
-    roundWinner()
+  this.roundNumber = 1;
+  this.gameBoard = new GameBoard();
+  this.winner  = null;
 
-    play()
-      while(true) {
+  calculateRoundWinner()
+
+  play()
+    while(true) {
+      if (roundNumber is odd) {
         human makes move
         break if roundWinner()
         computer makes move
+        break if roundWinner(/)
+      }
+
+      if (roundNumber is even) {
+        computer makes move
+        break if roundWinner()
+        human makes move
         break if roundWinner()
       }
-      playAgain = getPlayAgain()
-      if playAgain === n
-        terminate program??
-        where should I iterate the scoreboard? How can I access scoreboard from inside Round?
-        how do I alternate players? Can I use scoreBoard.roundNumber to alternate players?
+    }
+
+    this.winner = calculateRoundWinner()
+    gameBoard.reset();
+
+Does the logic of Round work? How will I create
+Fix logic behind players alternating per turn.
+
 
 */
 
-game = new Match();
-game.play();
+// game = new Match();
+// game.play();
