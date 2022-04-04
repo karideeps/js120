@@ -18,24 +18,8 @@ Minor revisions:
 
 What classes do I want to have?
 
-Squares
-
-GameBoard
-  needs Squares
-
-Human
-
-Computer
-
-Round
-  needs Human
-  needs Computer
-  needs GameBoard
-
-ScoreBoard
-
-Match
-  needs Round
-  needs ScoreBoard
+Before attempting to write the program:
+[] Go through JS120 and make written notes
+[] 
 
 */
